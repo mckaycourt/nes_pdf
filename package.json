@@ -1,4 +1,7 @@
 {
   "name": "nes_pdf",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "dependencies": {
+    "puppeteer": "^8.0.0"
+  }
 }
