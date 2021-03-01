@@ -11,7 +11,7 @@
 // };
 const puppeteer = require('puppeteer');
 
-exports.generatePDF = (req, res) => {
+exports.generatePDF = async (req, res) => {
     // need to get the url from the link
     const link = 'nes/7269'
     try {
