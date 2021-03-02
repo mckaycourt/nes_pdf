@@ -26,21 +26,22 @@ exports.generatePDF = async (req, res) => {
             waitUntil: 'networkidle0'
         })
         await page.goto(`https://portal.ybashirts.com/${link}`, {waitUntil: 'networkidle0'});
+        // await page.emulateMedia('screen');
         await new Promise((resolve, reject) => {
-            setTimeout(() => {
+            setTimeout(async () => {
+                const pdf = await page.pdf({
+                    format: 'A4',
+                    landscape: true,
+                    printBackground: true,
+                });
                 resolve();
             }, 4000);
           });
-          await page.waitForNavigation({
-            waitUntil: 'networkidle0',
-          });
-        // await page.goto(`https://portal.ybashirts.com/${link}`, {waitUntil: 'networkidle0'});
-        await page.emulateMedia('screen');
-        const pdf = await page.pdf({
-            format: 'A4',
-            landscape: true,
-            printBackground: true,
-        });
+        // const pdf = await page.pdf({
+        //     format: 'A4',
+        //     landscape: true,
+        //     printBackground: true,
+        // });
         browser.close();
         const file = bucket.file(fileName);
         await file
