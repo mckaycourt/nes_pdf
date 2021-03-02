@@ -25,11 +25,9 @@ exports.generatePDF = async (req, res) => {
         await page.click('#signIn', {
             waitUntil: 'networkidle0'
         })
+        await page.goto(`https://portal.ybashirts.com/${link}`, {waitUntil: 'networkidle0'});
         const myFunc = async () => {
-            setTimeout(async() => {
-                await page.goto(`https://portal.ybashirts.com/${link}`, {waitUntil: 'networkidle0'});
-                return;
-            }, 1000);
+            setTimeout(() => { return true }, 1000);
         }
         await myFunc()
         // await page.goto(`https://portal.ybashirts.com/${link}`, {waitUntil: 'networkidle0'});
