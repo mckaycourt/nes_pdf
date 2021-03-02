@@ -26,10 +26,11 @@ exports.generatePDF = async (req, res) => {
             waitUntil: 'networkidle0'
         })
         await page.goto(`https://portal.ybashirts.com/${link}`, {waitUntil: 'networkidle0'});
-        const myFunc = async () => {
-            setTimeout(() => { return true }, 1000);
-        }
-        await myFunc()
+        await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve();
+            }, 4000);
+          });
         // await page.goto(`https://portal.ybashirts.com/${link}`, {waitUntil: 'networkidle0'});
         await page.emulateMedia('screen');
         const pdf = await page.pdf({
