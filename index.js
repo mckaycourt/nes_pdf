@@ -10,6 +10,10 @@
 //     res.status(200).send(message);
 // };
 const puppeteer = require('puppeteer');
+const { Storage } = require('@google-cloud/storage');
+const storage = new Storage();
+const bucketName = 'yba-shirts.appspot.com';
+const bucket = storage.bucket(bucketName);
 
 // exports.generatePDF = async (req, res) => {
 //     // need to get the url from the link
@@ -79,24 +83,48 @@ const puppeteer = require('puppeteer');
 //     }
 // };
 
-exports.generatePDF = async (req, res) => {
-    // need to get the url from the link
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
-  await page.goto('https://google.com', {waitUntil: 'networkidle0'});
-  const pdf = await page.pdf({ format: 'A4' });
- 
-  await browser.close();
-  res.send(pdf);
-  return pdf
-};
-
 // exports.generatePDF = async (req, res) => {
-//     const browser = await puppeteer.launch({ headless: true });
-//     const page = await browser.newPage();
-//     await page.goto('https://google.com', {waitUntil: 'networkidle0'});
-//     setTimeout(async () => {
-//         const pdf = await page.pdf();
-//         res.send(pdf);
-//     }, 4000)
+//     // need to get the url from the link
+//   const browser = await puppeteer.launch({ headless: true });
+//   const page = await browser.newPage();
+//   await page.goto('https://google.com', {waitUntil: 'networkidle0'});
+//   const pdf = await page.pdf({ format: 'A4' });
+//   console.log('blablablablabal');
+//   await browser.close();
+//   res.send(pdf);
+//   return pdf
 // };
+
+exports.generatePDF = async (req, res) => {
+    console.log('Got Here');
+    const { fileName } = req.body;
+    const puppeteer = require('puppeteer');
+
+    try {
+        const browser = await puppeteer.launch({args: ['--no-sandbox']});
+        const page = await browser.newPage();
+        await page.goto("https://google.com", {waitUntil: 'networkidle0'});
+        await page.emulateMedia('screen');
+        const pdf = await page.pdf({
+            format: 'A4',
+            landscape: true,
+            printBackground: true,
+        });
+        console.log(pdf);
+        browser.close();
+        const file = bucket.file(fileName);
+        await file
+            .createWriteStream()
+            .on('error', (err) => {
+                throw err;
+            })
+            .on('finish', async () => {
+                console.log(`Created: ${fileName}`);
+                await file.makePublic();
+                res.send('Created NESPDF');
+            })
+            .end(pdf)
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send(err);
+    }};

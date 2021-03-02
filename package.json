@@ -2,7 +2,8 @@
   "name": "nes_pdf",
   "version": "0.0.1",
   "dependencies": {
-    "puppeteer": "^8.0.0"
+    "@google-cloud/storage": "^5.8.0",
+    "puppeteer": "^2.1.1"
   },
   "scripts": {
     "start": "npx functions-framework --target=generatePDF"
