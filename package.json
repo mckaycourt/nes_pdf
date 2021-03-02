@@ -3,5 +3,11 @@
   "version": "0.0.1",
   "dependencies": {
     "puppeteer": "^8.0.0"
+  },
+  "scripts": {
+    "start": "npx functions-framework --target=generatePDF"
+  },
+  "devDependencies": {
+    "@google-cloud/functions-framework": "^1.7.1"
   }
 }
