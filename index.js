@@ -31,6 +31,9 @@ exports.generatePDF = async (req, res) => {
                 resolve();
             }, 4000);
           });
+          await page.waitForNavigation({
+            waitUntil: 'networkidle0',
+          });
         // await page.goto(`https://portal.ybashirts.com/${link}`, {waitUntil: 'networkidle0'});
         await page.emulateMedia('screen');
         const pdf = await page.pdf({
