@@ -33,9 +33,8 @@ const bucket = storage.bucket(bucketName);
 //         console.log('goto');
 //         process.env.PUPPET_EMAIL
 //         // change this to process.env.PUPPET_EMAIL and process.env.PUPPET_PASS
-//         await page.type('#email', 'puppeteer@puppeteer.com');
-//         console.log('email');
-//         await page.type('#password', 'puppeteer');
+//         await page.type('#email', process.env.PUPPET_EMAIL);
+//         await page.type('#password', process.env.PUPPET_PASS);
 //         console.log('password');
 //         await page.click('#signIn', {
 //             waitUntil: 'networkidle0'
@@ -93,17 +92,24 @@ const bucket = storage.bucket(bucketName);
 //   await browser.close();
 //   res.send(pdf);
 //   return pdf
-// };
+// }
 
 exports.generatePDF = async (req, res) => {
     console.log('Got Here');
-    const { fileName } = req.body;
+    const { fileName, link } = req.body;
     const puppeteer = require('puppeteer');
 
     try {
         const browser = await puppeteer.launch({args: ['--no-sandbox']});
         const page = await browser.newPage();
-        await page.goto("https://google.com", {waitUntil: 'networkidle0'});
+        await page.setViewport({ width: 1920, height: 1080 });
+        await page.goto("https://portal.ybashirts.com", {waitUntil: 'networkidle0'});
+        await page.type('#email', process.env.PUPPET_EMAIL);
+        await page.type('#password', process.env.PUPPET_PASS);
+        await page.click('#signIn', {
+            waitUntil: 'networkidle0'
+        })
+        await page.goto(`https://portal.ybashirts.com/${link}`, {waitUntil: 'networkidle0'});
         await page.emulateMedia('screen');
         const pdf = await page.pdf({
             format: 'A4',
