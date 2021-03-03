@@ -33,15 +33,10 @@ exports.generatePDF = async (req, res) => {
                     format: 'A4',
                     landscape: true,
                     printBackground: true,
-                });
-                resolve();
-            }, 4000);
+                }).then(() => resolve()).catch((err) => reject(err));
+                // resolve();
+            }, 2000);
           });
-        // const pdf = await page.pdf({
-        //     format: 'A4',
-        //     landscape: true,
-        //     printBackground: true,
-        // });
         browser.close();
         const file = bucket.file(fileName);
         await file
