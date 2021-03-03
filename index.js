@@ -27,9 +27,10 @@ exports.generatePDF = async (req, res) => {
         })
         await page.goto(`https://portal.ybashirts.com/${link}`, {waitUntil: 'networkidle0'});
         // await page.emulateMedia('screen');
+        let pdf;
         await new Promise((resolve, reject) => {
             setTimeout(async () => {
-                const pdf = await page.pdf({
+                pdf = await page.pdf({
                     format: 'A4',
                     landscape: true,
                     printBackground: true,
