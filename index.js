@@ -51,13 +51,14 @@ exports.generatePDF = async (req, res) => {
         const file = bucket.file(fileName);
         await file
             .createWriteStream()
+            .write(pdf)
             .on('error', (err) => {
                 throw err;
             })
             .on('finish', async () => {
                 await file.makePublic();
             })
-            .end(pdf)
+            // .end(pdf)
         res.send('PDF Created!');
       }, 2000);
     } catch (err) {
