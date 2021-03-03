@@ -11,7 +11,7 @@ const storage = new Storage();
 const bucketName = 'yba-shirts.appspot.com';
 const bucket = storage.bucket(bucketName);
 
-exports.generatePDF = async (req, res) {
+exports.generatePDF = async (req, res) => {
     const { fileName, link } = req.body;
 
     try {
